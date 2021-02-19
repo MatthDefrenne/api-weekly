@@ -4,8 +4,9 @@ import { Schedules } from './schedules';
 Schedules
 @Entity()
 export class User {
-  @PrimaryGeneratedColumn()
-  id: number;
+
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column()
   email: string;
@@ -15,5 +16,8 @@ export class User {
 
   @Column({ default: false })
   isAdmin: boolean;
+
+  @Column("int", { array: true, default: null })
+  preferedCategoriesIds: number[];
 
 }

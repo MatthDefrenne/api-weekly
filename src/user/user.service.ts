@@ -25,6 +25,15 @@ export class UserService {
         }
     }
 
+    async findById(id: number): Promise<User> {
+        try {
+            const userRepo = this.connection.getRepository(User);
+            return userRepo.findOne(id);
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async findByEmail(user: User): Promise<User> {
         try {
             const userRepo = this.connection.getRepository(User);

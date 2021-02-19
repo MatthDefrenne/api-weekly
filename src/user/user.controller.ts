@@ -1,11 +1,11 @@
-import { Body, Controller, Get, HttpStatus, Post, Res } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Param, Post, Res, UseGuards } from '@nestjs/common';
 import { User } from 'entities/user';
 import { UserService } from './user.service';
 import { Response, Request } from 'express';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('user')
 export class UserController {
-
 
     constructor(private userService: UserService) { }
 
@@ -20,5 +20,13 @@ export class UserController {
       }
       const userCreated = await this.userService.create(user);
       res.status(HttpStatus.CREATED).json(userCreated);
+    }
+
+    @Get(':id')
+    async getUserById(@Res() res: Response, @Param() id: number): Promise<any> {
+      const user = await this.userService.findById(id);
+      if (user) {
+        res.status(HttpStatus.CREATED).json(user);
+      }      
     }
 }
