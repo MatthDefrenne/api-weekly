@@ -1,20 +1,16 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, CreateDateColumn } from 'typeorm';
 import { Photos } from './photos';
 import { Schedules } from './schedules';
-Schedules
 @Entity()
-export class Establishment {
+export class Events {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
-  email: string;
+  startTime: Date;
   
   @Column()
-  firstname: string;
-
-  @Column()
-  lastName: string;
+  endTime: Date;
 
   @Column()
   name: string;
@@ -25,23 +21,17 @@ export class Establishment {
   @Column()
   url: string;
 
+  @OneToMany(type => Photos, photo => photo.event)
+  photos: Photos[];
+
+  @OneToMany(type => Schedules, schedule => schedule.event)
+  schedules: Schedules[];
+
   @Column()
   description: string;
 
-  @Column("int", { array: true })
-  categoriesIds: number[];
-  
-  @OneToMany(type => Photos, photo => photo.establishment)
-  photos: Photos[];
-
-  @OneToMany(type => Schedules, schedule => schedule.establishment)
-  schedules: Schedules[];
-
-  @Column({ default: false })
-  isActive: boolean;
-
   @Column()
-  userId: number;
+  establishmentId: number;
 
   @CreateDateColumn()
   createdAt: Date;

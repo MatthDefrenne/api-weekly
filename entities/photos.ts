@@ -1,5 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToOne } from 'typeorm';
 import { Establishment } from './establishment';
+import { Events } from './events';
 
 @Entity()
 export class Photos {
@@ -11,5 +12,8 @@ export class Photos {
   
   @ManyToOne(type => Establishment, author => author.photos)
   establishment: Establishment;
+
+  @ManyToOne(type => Events, author => author.photos)
+  event: Events;
 
 }
