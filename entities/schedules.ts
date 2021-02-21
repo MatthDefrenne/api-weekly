@@ -7,11 +7,11 @@ export class Schedules {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  week: string;
+  @Column({default: 0})
+  week: number;
 
   @Column()
-  day: string;
+  day: number;
 
   @Column()
   startTime: Date;
@@ -25,7 +25,7 @@ export class Schedules {
   @ManyToOne(type => Establishment, establishment => establishment.schedules, { nullable: true })
   establishment: Establishment;
 
-  @ManyToOne(type => Events, establishment => establishment.schedules, { nullable: true })
+  @ManyToOne(type => Events, event => event.schedules, { nullable: true })
   event: Events;
 
 }

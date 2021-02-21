@@ -43,6 +43,13 @@ export class Establishment {
   @Column()
   userId: number;
 
+  @Column('geometry', {
+    name: 'geo',
+    nullable: true,
+    spatialFeatureType: 'Point',
+  })
+  geoLocation: object;
+
   @CreateDateColumn()
   createdAt: Date;
 

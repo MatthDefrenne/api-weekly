@@ -19,6 +19,7 @@ import { LocalStrategy } from './auth/local.strategy';
 import { FacebookStrategy } from './auth/facebook.strategy';
 import { EmailingService } from './emailing/emailing.service';
 import { ContactController } from './contact/contact.controller';
+import { Events } from 'entities/events';
 
 @Module({
   imports: [
@@ -29,7 +30,7 @@ import { ContactController } from './contact/contact.controller';
       username: 'postgres',
       password: 'promotions',
       database: 'weekly',
-      entities: [Establishment, Photos, Schedules, User],
+      entities: [Establishment, Photos, Schedules, User, Events],
       synchronize: true,
     }),
     MulterModule.register({
