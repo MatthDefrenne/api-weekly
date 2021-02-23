@@ -22,6 +22,7 @@ export class EstablishmentService {
       ) {}
 
       async create(establishment: Establishment) {
+        console.log(establishment);
         const establishmentRepo = this.connection.getRepository(Establishment);
         establishment.schedules = await this.schedulesService.addSchedules(establishment.schedules);
         establishment.photos = await this.photosService.addPhotos(establishment.photos);
@@ -42,6 +43,17 @@ export class EstablishmentService {
       async findAll(): Promise<Establishment[]>  {
         const establishmentRepo = this.connection.getRepository(Establishment);
         return establishmentRepo.find({relations: ['photos', 'schedules']});
+      }
+
+      async findByUserId(userId: string): Promise<Establishment[]>  {
+        const establishmentRepo = this.connection.getRepository(Establishment);
+        return establishmentRepo.createQueryBuilder()
+        .select("establishment")
+        .from(Establishment, "establishment")
+        .where("establishment.userId == :userId", { userId })
+        .leftJoinAndSelect("establishment.photos", "photos")
+        .leftJoinAndSelect("establishment.schedules", "schedules")
+        .getMany();
       }
 
       async approuveEstablishment(id: number) {

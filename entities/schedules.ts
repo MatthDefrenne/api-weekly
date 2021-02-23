@@ -13,10 +13,10 @@ export class Schedules {
   @Column()
   day: number;
 
-  @Column()
+  @Column('time')
   startTime: Date;
 
-  @Column()
+  @Column('time')
   endTime: Date;
 
   @Column({default: true})

@@ -14,8 +14,10 @@ export class PhotosService {
 
       async addPhotos(photos: Photos[]) {
         const photoRepo = this.connection.getRepository(Photos);
-          return Promise.all(photos.map(async (photo) => { 
-            return await photoRepo.save(photo) 
+          return Promise.all(photos.map(async (photo: any) => { 
+            const newPhoto = new Photos();
+            newPhoto.url = photo;
+            return await photoRepo.save(newPhoto) 
           }))
       }
 }

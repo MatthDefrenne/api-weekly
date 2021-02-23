@@ -28,6 +28,9 @@ export class Establishment {
   @Column()
   description: string;
 
+  @Column()
+  adresse: string;
+
   @Column("int", { array: true })
   categoriesIds: number[];
   
@@ -41,7 +44,7 @@ export class Establishment {
   isActive: boolean;
 
   @Column()
-  userId: number;
+  userId: string;
 
   @Column('geometry', {
     name: 'geo',
