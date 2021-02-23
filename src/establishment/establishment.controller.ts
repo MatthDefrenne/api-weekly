@@ -13,6 +13,12 @@ export class EstablishmentController {
       res.status(HttpStatus.OK).json([]);
     }
 
+    @Post('save')
+    async save(@Res() res: Response, @Body() etab: Establishment): Promise<any> {
+      await this.establishmentService.save(etab);
+      res.status(HttpStatus.OK).json([]);
+    }
+
     @Get('categories/:ids')
     async findAllByCategoriesIds(@Res() res: Response, @Param() params): Promise<any> {
       const ids = params.ids.split(',').map((e) => Number(e));
@@ -23,6 +29,18 @@ export class EstablishmentController {
     @Get('all')
     async findAll(@Res() res: Response): Promise<any> {
       const etabs = await this.establishmentService.findAll();
+      res.status(HttpStatus.OK).json(etabs);
+    }
+
+    @Get('self/:id')
+    async findOne(@Res() res: Response, @Param() params): Promise<any> {
+      const etabs = await this.establishmentService.findOne(params);
+      res.status(HttpStatus.OK).json(etabs);
+    }
+
+    @Get('user/:id')
+    async findByUserId(@Res() res: Response, @Param() params): Promise<any> {
+      const etabs = await this.establishmentService.findByUserId(params);
       res.status(HttpStatus.OK).json(etabs);
     }
 

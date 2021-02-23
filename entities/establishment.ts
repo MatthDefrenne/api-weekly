@@ -4,8 +4,8 @@ import { Schedules } from './schedules';
 Schedules
 @Entity()
 export class Establishment {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column()
   email: string;

@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Establishment } from 'entities/establishment';
 import { Photos } from 'entities/photos';
 import { Schedules } from 'entities/schedules';
+import { User } from 'entities/user';
 import { connect } from 'node-mailjet';
 import { throwError } from 'rxjs';
 import { EmailingService } from 'src/emailing/emailing.service';
@@ -29,6 +30,11 @@ export class EstablishmentService {
         establishmentRepo.save(establishment);
       }
 
+      async save(establishment: Establishment) {
+        const establishmentRepo = this.connection.getRepository(Establishment);
+        establishmentRepo.save(establishment);
+      }
+
       async findEtablissmentByIds(ids: Number[]): Promise<Establishment[]> {
         const establishmentRepo = this.connection.getRepository(Establishment);
         return establishmentRepo.createQueryBuilder()
@@ -45,12 +51,17 @@ export class EstablishmentService {
         return establishmentRepo.find({relations: ['photos', 'schedules']});
       }
 
-      async findByUserId(userId: string): Promise<Establishment[]>  {
+      async findOne(id): Promise<Establishment>  {
+        const establishmentRepo = this.connection.getRepository(Establishment);
+        return establishmentRepo.findOne(id, {relations: ['photos', 'schedules']});
+      }
+
+      async findByUserId(user: User): Promise<Establishment[]>  {
         const establishmentRepo = this.connection.getRepository(Establishment);
         return establishmentRepo.createQueryBuilder()
         .select("establishment")
         .from(Establishment, "establishment")
-        .where("establishment.userId == :userId", { userId })
+        .where("establishment.userId = :id", { id: user.id })
         .leftJoinAndSelect("establishment.photos", "photos")
         .leftJoinAndSelect("establishment.schedules", "schedules")
         .getMany();
