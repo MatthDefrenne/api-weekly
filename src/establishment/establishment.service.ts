@@ -58,13 +58,7 @@ export class EstablishmentService {
 
       async findByUserId(user: User): Promise<Establishment[]>  {
         const establishmentRepo = this.connection.getRepository(Establishment);
-        return establishmentRepo.createQueryBuilder()
-        .select("establishment")
-        .from(Establishment, "establishment")
-        .where("establishment.userId = :id", { id: user.id })
-        .leftJoinAndSelect("establishment.photos", "photos")
-        .leftJoinAndSelect("establishment.schedules", "schedules")
-        .getMany();
+        return establishmentRepo.find({ where: { userId: user.id }, relations: ['photos', 'schedules']})
       }
 
       async approuveEstablishment(id: number) {
