@@ -32,6 +32,10 @@ export class EstablishmentService {
 
       async save(establishment: Establishment) {
         const establishmentRepo = this.connection.getRepository(Establishment);
+        const photosRepo = this.connection.getRepository(Photos);
+        const schedules = this.connection.getRepository(Schedules);
+        photosRepo.save(establishment.photos);
+        schedules.save(establishment.schedules);
         establishmentRepo.save(establishment);
       }
 
