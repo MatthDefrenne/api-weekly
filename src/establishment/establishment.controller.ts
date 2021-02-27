@@ -1,7 +1,7 @@
 import { Body, Controller, Get, HttpStatus, Param, Post, Req, Res, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Establishment } from 'entities/establishment';
-import { EstablishmentService } from './establishment.service';
+import { EstablishmentService, IFilter } from './establishment.service';
 import { Response, Request } from 'express';
 
 @Controller('establishment')
@@ -19,10 +19,9 @@ export class EstablishmentController {
       res.status(HttpStatus.OK).json([]);
     }
 
-    @Get('categories/:ids')
-    async findAllByCategoriesIds(@Res() res: Response, @Param() params): Promise<any> {
-      const ids = params.ids.split(',').map((e) => Number(e));
-      const etabs = await this.establishmentService.findEtablissmentByIds(ids);
+    @Post('find')
+    async findAllByCategoriesIds(@Res() res: Response, @Body() filter: IFilter): Promise<any> {
+      const etabs = await this.establishmentService.findEtablissmentByIds(filter);
       res.status(HttpStatus.OK).json(etabs);
     }
 
