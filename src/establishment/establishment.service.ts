@@ -57,7 +57,7 @@ export class EstablishmentService {
           radius: filter.distance.radius
         })
         .leftJoinAndSelect("establishment.photos", "photos")
-        .leftJoinAndSelect("establishment.schedules ", "schedules", "schedules.day = :day AND schedules.isClosed = false", { day: filter.day })
+        .leftJoinAndSelect("establishment.schedules", "schedules", "schedules.day = :day AND schedules.isClosed = false", { day: filter.day })
         .getMany();
       }
 
