@@ -51,10 +51,10 @@ export class EstablishmentService {
         .select("establishment")
         .from(Establishment, "establishment")
         .where("establishment.categoriesIds @> :ids ", { ids: filter.ids })
-        .where("ST_DWithin(establishment.geo, ST_SetSRID(ST_MakePoint(:longitude, :latitude), 3785), :radius)", {
+        .where("ST_DWithin(establishment.geoLocation::geography, ST_SetSRID(ST_MakePoint(:longitude,:latitude),4326)::geography, :radius);", {
           longitude: filter.distance.longitude,
           latitude: filter.distance.latitude,
-          radius: filter.distance.radius
+          radius: filter.distance.radius * 1000
         })
         .leftJoinAndSelect("establishment.photos", "photos")
         .leftJoinAndSelect("establishment.schedules", "schedules", "schedules.day = :day AND schedules.isClosed = false", { day: filter.day })
