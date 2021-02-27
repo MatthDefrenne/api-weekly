@@ -51,7 +51,7 @@ export class EstablishmentService {
         .select("establishment")
         .from(Establishment, "establishment")
         .where("establishment.categoriesIds @> :ids ", { ids: filter.ids })
-        .where("ST_DWithin(establishment.geoLocation, ST_MakePoint(:longitude,:latitude)::geography, :radius))", {
+        .where("ST_DWithin(establishment.geoLocation, ST_MakePoint(:longitude,:latitude)::geography, :radius)", {
           longitude: filter.distance.longitude,
           latitude: filter.distance.latitude,
           radius: filter.distance.radius * 1000
