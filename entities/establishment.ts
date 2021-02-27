@@ -19,6 +19,9 @@ export class Establishment {
   @Column()
   name: string;
 
+  @Column({ default: 0 })
+  rating: Number;
+
   @Column()
   telephone: string;
 

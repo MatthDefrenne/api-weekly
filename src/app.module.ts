@@ -20,6 +20,8 @@ import { FacebookStrategy } from './auth/facebook.strategy';
 import { EmailingService } from './emailing/emailing.service';
 import { ContactController } from './contact/contact.controller';
 import { Events } from 'entities/events';
+import { EventService } from './event/event.service';
+import { EventController } from './event/event.controller';
 
 @Module({
   imports: [
@@ -37,7 +39,7 @@ import { Events } from 'entities/events';
       dest: './upload',
     })
   ],
-  controllers: [AppController, EstablishmentController, UserController, AuthController, ContactController],
+  controllers: [AppController, EstablishmentController, UserController, AuthController, ContactController, EventController],
   providers: [
     AppService, 
     EstablishmentService, 
@@ -48,6 +50,7 @@ import { Events } from 'entities/events';
     FacebookStrategy,
     LocalStrategy,
     EmailingService,
+    EventService,
   ],
 })
 export class AppModule {}

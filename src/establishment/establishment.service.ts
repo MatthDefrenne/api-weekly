@@ -12,6 +12,13 @@ import { SchedulesService } from 'src/schedules/schedules.service';
 
 import { Any, Connection, In, Raw, Repository } from 'typeorm';
 
+
+export interface IFilter {
+  ids: Number[];
+  day: string;
+  distance: { longitude: number, latitude: number, radius: number };
+}
+
 @Injectable()
 export class EstablishmentService {
 
@@ -23,7 +30,6 @@ export class EstablishmentService {
       ) {}
 
       async create(establishment: Establishment) {
-        console.log(establishment);
         const establishmentRepo = this.connection.getRepository(Establishment);
         establishment.schedules = await this.schedulesService.addSchedules(establishment.schedules);
         establishment.photos = await this.photosService.addPhotos(establishment.photos);
@@ -39,14 +45,19 @@ export class EstablishmentService {
         establishmentRepo.save(establishment);
       }
 
-      async findEtablissmentByIds(ids: Number[]): Promise<Establishment[]> {
+      async findEtablissmentByIds(filter: IFilter): Promise<Establishment[]> {
         const establishmentRepo = this.connection.getRepository(Establishment);
         return establishmentRepo.createQueryBuilder()
         .select("establishment")
         .from(Establishment, "establishment")
-        .where("establishment.categoriesIds @> :ids ", { ids })
+        .where("establishment.categoriesIds @> :ids ", { ids: filter.ids })
+        .where("ST_DWithin(geo, ST_SetSRID(ST_MakePoint(:longitude, :latitude), 3785), :radius)", {
+          longitude: filter.distance.longitude,
+          latitude: filter.distance.latitude,
+          radius: filter.distance.radius
+        })
         .leftJoinAndSelect("establishment.photos", "photos")
-        .leftJoinAndSelect("establishment.schedules", "schedules")
+        .leftJoinAndSelect("establishment.schedules ", "schedules", "schedules.day = :day AND schedules.isClosed = false", { day: filter.day })
         .getMany();
       }
 

@@ -30,13 +30,19 @@ export class Events {
   @Column()
   description: string;
 
-  @Column()
-  establishmentId: number;
-
   @CreateDateColumn()
   createdAt: Date;
 
   @CreateDateColumn()
   updatedAt: Date;
 
+  @Column('geometry', {
+    name: 'geo',
+    nullable: true,
+    spatialFeatureType: 'Point',
+  })
+  geoLocation: object;
+
+  @Column()
+  adresse: string;
 }
