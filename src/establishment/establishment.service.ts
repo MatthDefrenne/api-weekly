@@ -16,7 +16,9 @@ import { Any, Connection, In, Raw, Repository } from 'typeorm';
 export interface IFilter {
   ids: Number[];
   day: string;
-  distance: { longitude: number, latitude: number, radius: number };
+  longitude: number;
+  latitude: number;
+  radius: number;
 }
 
 @Injectable()
@@ -52,9 +54,9 @@ export class EstablishmentService {
         .from(Establishment, "establishment")
         .where("establishment.categoriesIds @> :ids ", { ids: filter.ids })
         .where("ST_DWithin(establishment.geoLocation, ST_MakePoint(:longitude,:latitude)::geography, :radius)", {
-          longitude: filter.distance.longitude,
-          latitude: filter.distance.latitude,
-          radius: filter.distance.radius * 1000
+          longitude: filter.longitude,
+          latitude: filter.latitude,
+          radius: filter.radius * 1000
         })
         .leftJoinAndSelect("establishment.photos", "photos")
         .leftJoinAndSelect("establishment.schedules", "schedules", "schedules.day = :day AND schedules.isClosed = false", { day: filter.day })
