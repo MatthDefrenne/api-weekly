@@ -53,13 +53,14 @@ export class EstablishmentService {
         .select("establishment")
         .from(Establishment, "establishment")
         .where("establishment.categoriesIds @> :ids ", { ids: filter.ids })
+        .where("establishment.isActive = true ", { ids: filter.ids })
         .where("ST_DWithin(establishment.geoLocation, ST_MakePoint(:longitude,:latitude)::geography, :radius)", {
           longitude: filter.longitude,
           latitude: filter.latitude,
           radius: filter.radius * 1000
         })
         .leftJoinAndSelect("establishment.photos", "photos")
-        .leftJoinAndSelect("establishment.schedules", "schedules", "schedules.day = :day AND schedules.isClosed = false", { day: filter.day })
+        .leftJoinAndSelect("establishment.schedules", "schedules", filter.day ? "schedules.day = :day AND schedules.isClosed = false" : null, { day: filter.day })
         .getMany();
       }
 

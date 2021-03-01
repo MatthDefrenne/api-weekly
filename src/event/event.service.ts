@@ -39,8 +39,13 @@ export class EventService {
         return eventRepo.findOne(id, {relations: ['photos', 'schedules']});
     }
 
+    async findAll(): Promise<Events[]>  {
+        const eventRepo = this.connection.getRepository(Events);
+        return eventRepo.find({relations: ['photos', 'schedules']});
+    }
+
     async findByUserId(user: User): Promise<Events[]>  {
         const establishmentRepo = this.connection.getRepository(Events);
         return establishmentRepo.find({ where: { userId: user.id }, relations: ['photos', 'schedules']})
-      }
+    }
 }
