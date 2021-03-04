@@ -74,6 +74,7 @@ export class EstablishmentService {
                 .where('schedules."establishmentId" = establishment.id')
           ),
         )
+        .leftJoinAndSelect('establishment.schedules', 'schedules')
         .leftJoinAndSelect('establishment.photos', 'photos')
         .getMany();      
       }
