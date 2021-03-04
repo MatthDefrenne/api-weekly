@@ -10,8 +10,10 @@ import { EmailingService } from 'src/emailing/emailing.service';
 import { PhotosService } from 'src/photos/photos.service';
 import { SchedulesService } from 'src/schedules/schedules.service';
 
-import { Any, Connection, In, Raw, Repository } from 'typeorm';
+import { Any, Connection, In, Raw, Repository, SelectQueryBuilder } from 'typeorm';
 
+
+export const existsQuery = <T>(builder: SelectQueryBuilder<T>) => `exists (${builder.getQuery()})`;
 
 export interface IFilter {
   ids: Number[];
@@ -49,20 +51,31 @@ export class EstablishmentService {
 
       async findEtablissmentByIds(filter: IFilter): Promise<Establishment[]> {
         const establishmentRepo = this.connection.getRepository(Establishment);
-        return establishmentRepo.createQueryBuilder()
-        .select("establishment")
-        .from(Establishment, "establishment")
-        .where("establishment.categoriesIds @> :ids", { ids: filter.ids })
-        .where("establishment.isActive = true")
-        .where("ST_DWithin(establishment.geoLocation, ST_MakePoint(:longitude,:latitude)::geography, :radius)", {
-          longitude: filter.longitude,
-          latitude: filter.latitude,
-          radius: (filter.radius * 1000),
+        return establishmentRepo
+        .createQueryBuilder()
+        .select('establishment')
+        .from(Establishment, 'establishment')
+        .where('establishment.categoriesIds @> :ids ', { ids: filter.ids })
+        .where('establishment.isActive = true ', { ids: filter.ids })
+        .where('ST_DWithin(establishment.geoLocation, ST_MakePoint(:longitude,:latitude)::geography, :radius)', {
+          longitude: filter.longitude | 50.0,
+          latitude: filter.latitude | 50.0,
+          radius: (filter.radius * 1000) | (99999 * 1000),
         })
-        .where('exists(select * from schedules s where s.day = :day and s.isClosed = false and s."establishmentId" = establishment.id)', { day: filter.day })
-        .leftJoinAndSelect("establishment.photos", "photos")
-        .leftJoinAndSelect("establishment.schedules", "schedules")
-        .getMany();
+        .where(
+          existsQuery(
+            this.connection
+              .getRepository(Schedules)
+              .createQueryBuilder()
+                .select('schedules')
+                .from(Schedules, 'schedules')
+                .where('schedules.day = :day')
+                .where('schedules.isClosed = false')
+                .where('schedules."establishmentId" = establishment.id')
+          ),
+        )
+        .leftJoinAndSelect('establishment.photos', 'photos')
+        .getMany();      
       }
 
       async findAll(): Promise<Establishment[]>  {
