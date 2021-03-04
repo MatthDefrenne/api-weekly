@@ -52,26 +52,27 @@ export class EstablishmentService {
         return establishmentRepo.createQueryBuilder()
         .select("establishment")
         .from(Establishment, "establishment")
-        .where("establishment.categoriesIds @> :ids ", { ids: filter.ids })
-        .where("establishment.isActive = true ", { ids: filter.ids })
+        .where("establishment.categoriesIds @> :ids", { ids: filter.ids })
+        .where("establishment.isActive = true")
         .where("ST_DWithin(establishment.geoLocation, ST_MakePoint(:longitude,:latitude)::geography, :radius)", {
           longitude: filter.longitude,
           latitude: filter.latitude,
-          radius: filter.radius * 1000
+          radius: (filter.radius * 1000),
         })
+        .where('exists(select * from schedules s where s.day = :day and s.isClosed = false and s."establishmentId" = establishment.id)', {})
         .leftJoinAndSelect("establishment.photos", "photos")
-        .leftJoinAndSelect("establishment.schedules", "schedules", filter.day ? "schedules.day = :day AND schedules.isClosed = false" : null, { day: filter.day })
+        .leftJoinAndSelect("establishment.schedules", "schedules", "schedules.day = :day AND schedules.isClosed = false")
         .getMany();
       }
 
       async findAll(): Promise<Establishment[]>  {
         const establishmentRepo = this.connection.getRepository(Establishment);
-        return establishmentRepo.find({relations: ['photos', 'schedules']});
+        return establishmentRepo.find({ relations: ['photos', 'schedules'] });
       }
 
       async findOne(id): Promise<Establishment>  {
         const establishmentRepo = this.connection.getRepository(Establishment);
-        return establishmentRepo.findOne(id, {relations: ['photos', 'schedules']});
+        return establishmentRepo.findOne(id, { relations: ['photos', 'schedules'] });
       }
 
       async findByUserId(user: User): Promise<Establishment[]>  {
