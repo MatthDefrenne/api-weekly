@@ -59,7 +59,7 @@ export class EstablishmentService {
           latitude: filter.latitude,
           radius: (filter.radius * 1000),
         })
-        .where('exists(select * from schedules s where s.day = :day and s.isClosed = false and s."establishmentId" = establishment.id)', {})
+        .where('exists(select * from schedules s where s.day = :day and s.isClosed = false and s."establishmentId" = establishment.id)', { day: filter.day })
         .leftJoinAndSelect("establishment.photos", "photos")
         .leftJoinAndSelect("establishment.schedules", "schedules", "schedules.day = :day AND schedules.isClosed = false")
         .getMany();
