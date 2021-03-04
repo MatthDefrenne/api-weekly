@@ -61,7 +61,7 @@ export class EstablishmentService {
         })
         .where('exists(select * from schedules s where s.day = :day and s.isClosed = false and s."establishmentId" = establishment.id)', { day: filter.day })
         .leftJoinAndSelect("establishment.photos", "photos")
-        .leftJoinAndSelect("establishment.schedules", "schedules", "schedules.day = :day AND schedules.isClosed = false")
+        .leftJoinAndSelect("establishment.schedules", "schedules")
         .getMany();
       }
 
