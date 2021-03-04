@@ -69,7 +69,7 @@ export class EstablishmentService {
               .createQueryBuilder()
                 .select('schedules')
                 .from(Schedules, 'schedules')
-                .where('schedules.day = :day')
+                .where('schedules.day = :day', { day: filter.day })
                 .where('schedules.isClosed = false')
                 .where('schedules."establishmentId" = establishment.id')
           ),
