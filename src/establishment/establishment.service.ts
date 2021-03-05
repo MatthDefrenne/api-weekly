@@ -56,7 +56,7 @@ export class EstablishmentService {
         .createQueryBuilder()
         .select('establishment')
         .from(Establishment, 'establishment')
-        .where('establishment.categoriesIds && :ids', { ids: [filter.ids] })
+        .where('establishment.categoriesIds @> :ids', { ids: [filter.ids] })
         .andWhere('establishment.isActive = false', { ids: filter.ids })
         .andWhere('ST_DWithin(establishment.geoLocation, ST_MakePoint(:longitude,:latitude)::geography, :radius)', {
           longitude: filter.longitude,
@@ -95,7 +95,7 @@ export class EstablishmentService {
         return establishmentRepo.find({ where: { userId: user.id }, relations: ['photos', 'schedules']})
       }
 
-      async approuveEstablishment(id: number) {
+      async approuveEstablishment(id: string) {
         const establishmentRepo = this.connection.getRepository(Establishment);
         const establishment = await establishmentRepo.findOne(id);
         establishment.isActive = true;
