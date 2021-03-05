@@ -57,13 +57,13 @@ export class EstablishmentService {
         .select('establishment')
         .from(Establishment, 'establishment')
         .where('establishment.categoriesIds && :ids', { ids: [filter.ids] })
-        .where('establishment.isActive = true', { ids: filter.ids })
-        .where('ST_DWithin(establishment.geoLocation, ST_MakePoint(:longitude,:latitude)::geography, :radius)', {
+        .andWhere('establishment.isActive = true', { ids: filter.ids })
+        .andWhere('ST_DWithin(establishment.geoLocation, ST_MakePoint(:longitude,:latitude)::geography, :radius)', {
           longitude: filter.longitude,
           latitude: filter.latitude,
           radius: (filter.radius * 1000),
         })
-        .where(
+        .andWhere(
           existsQuery(
             this.connection
               .getRepository(Schedules)
