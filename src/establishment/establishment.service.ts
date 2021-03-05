@@ -50,12 +50,13 @@ export class EstablishmentService {
       }
 
       async findEtablissmentByIds(filter: IFilter): Promise<Establishment[]> {
+        console.log(filter);
         const establishmentRepo = this.connection.getRepository(Establishment);
         return establishmentRepo
         .createQueryBuilder()
         .select('establishment')
         .from(Establishment, 'establishment')
-        .where('establishment.categoriesIds && :ids', { ids: filter.ids })
+        .where('establishment.categoriesIds && :ids', { ids: [filter.ids] })
         .where('establishment.isActive = true', { ids: filter.ids })
         .where('ST_DWithin(establishment.geoLocation, ST_MakePoint(:longitude,:latitude)::geography, :radius)', {
           longitude: filter.longitude,
