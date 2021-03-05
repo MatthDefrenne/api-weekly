@@ -39,7 +39,7 @@ export class EstablishmentController {
 
     @Post('approuved')
     async approuved(@Res() res: Response, @Body() etab: Establishment): Promise<any> {
-      const etabs = await this.establishmentService.approuveEstablishment(etab.id);
+      const etabs = await this.establishmentService.approuveEstablishment(etab);
       res.status(HttpStatus.OK).json(etabs);
     }
 
