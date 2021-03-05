@@ -55,12 +55,12 @@ export class EstablishmentService {
         .createQueryBuilder()
         .select('establishment')
         .from(Establishment, 'establishment')
-        .where('establishment.categoriesIds @> :ids ', { ids: filter.ids })
-        .where('establishment.isActive = true ', { ids: filter.ids })
+        .where('establishment.categoriesIds && :ids', { ids: filter.ids })
+        .where('establishment.isActive = true', { ids: filter.ids })
         .where('ST_DWithin(establishment.geoLocation, ST_MakePoint(:longitude,:latitude)::geography, :radius)', {
-          longitude: filter.longitude | 50.0,
-          latitude: filter.latitude | 50.0,
-          radius: (filter.radius * 1000) | (99999 * 1000),
+          longitude: filter.longitude,
+          latitude: filter.latitude,
+          radius: (filter.radius * 1000),
         })
         .where(
           existsQuery(
