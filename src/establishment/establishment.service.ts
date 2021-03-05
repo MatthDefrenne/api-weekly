@@ -57,7 +57,7 @@ export class EstablishmentService {
         .select('establishment')
         .from(Establishment, 'establishment')
         .where('establishment.categoriesIds && :ids', { ids: [filter.ids] })
-        .andWhere('establishment.isActive = true', { ids: filter.ids })
+        .andWhere('establishment.isActive = false', { ids: filter.ids })
         .andWhere('ST_DWithin(establishment.geoLocation, ST_MakePoint(:longitude,:latitude)::geography, :radius)', {
           longitude: filter.longitude,
           latitude: filter.latitude,
