@@ -57,7 +57,7 @@ export class EstablishmentService {
         .select('establishment')
         .from(Establishment, 'establishment')
         .where('establishment.categoriesIds && :ids', { ids: [filter.ids] })
-        .andWhere('establishment.isActive = false', { ids: filter.ids })
+        .andWhere('establishment.isActive = true', { ids: filter.ids })
         .andWhere('ST_DWithin(establishment.geoLocation, ST_MakePoint(:longitude,:latitude)::geography, :radius)', {
           longitude: filter.longitude,
           latitude: filter.latitude,
@@ -95,10 +95,8 @@ export class EstablishmentService {
         return establishmentRepo.find({ where: { userId: user.id }, relations: ['photos', 'schedules']})
       }
 
-      async approuveEstablishment(id: string) {
+      async approuveEstablishment(establishment: Establishment) {
         const establishmentRepo = this.connection.getRepository(Establishment);
-        const establishment = await establishmentRepo.findOne(id);
-        establishment.isActive = true;
         this.emailingService.messageActivated(establishment);
         await establishmentRepo.save(establishment);
       }
