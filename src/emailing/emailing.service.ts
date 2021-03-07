@@ -54,7 +54,7 @@ export class EmailingService {
                             "To": [
                                     {
                                             "Email": establishment.email,
-                                            "Name": `${establishment.firstname}`
+                                            "Name": `${establishment.name}`
                                     }
                             ],
                             "Subject": "Votre établissement a été accepter sur weeklyapp.be!",
