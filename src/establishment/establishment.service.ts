@@ -73,9 +73,10 @@ export class EstablishmentService {
                 .where('schedules.day = :day', { day: filter.day })
                 .where('schedules.isClosed = false')
                 .where('schedules."establishmentId" = establishment.id')
+                .orderBy('schedules.day', 'ASC')
           ),
         )
-        .leftJoinAndSelect('establishment.schedules', 'schedules', 'ORDER BY schedules.day DESC')
+        .leftJoinAndSelect('establishment.schedules', 'schedules')
         .leftJoinAndSelect('establishment.photos', 'photos')
         .getMany();      
       }
