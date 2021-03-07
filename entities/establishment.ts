@@ -11,12 +11,6 @@ export class Establishment {
   email: string;
   
   @Column()
-  firstname: string;
-
-  @Column()
-  lastName: string;
-
-  @Column()
   name: string;
 
   @Column({ default: 0 })
