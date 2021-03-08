@@ -14,9 +14,21 @@ export class EventController {
       res.status(HttpStatus.OK).json([]);
     }
 
+    @Post('save')
+    async save(@Res() res: Response, @Body() event: Events): Promise<any> {
+      await this.eventService.save(event);
+      res.status(HttpStatus.OK).json([]);
+    }
+
     @Get('all')
     async findAll(@Res() res: Response): Promise<any> {
       const etabs = await this.eventService.findAll();
+      res.status(HttpStatus.OK).json(etabs);
+    }
+
+    @Get('week')
+    async findAllThisWeek(@Res() res: Response): Promise<any> {
+      const etabs = await this.eventService.findAllThisWeek();
       res.status(HttpStatus.OK).json(etabs);
     }
     
@@ -25,4 +37,11 @@ export class EventController {
       const etabs = await this.eventService.findByUserId(params);
       res.status(HttpStatus.OK).json(etabs);
     }
+
+    @Post('approuved')
+    async approuved(@Res() res: Response, @Body() event: Events): Promise<any> {
+      const etabs = await this.eventService.approuveEvent(event);
+      res.status(HttpStatus.OK).json(etabs);
+    }
+
 }

@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Establishment } from 'entities/establishment';
+import { Events } from 'entities/events';
 import { User } from 'entities/user';
 import * as mailjet from 'node-mailjet';
 import { EstablishmentService } from 'src/establishment/establishment.service';
@@ -43,6 +44,29 @@ export class EmailingService {
     }
 
     messageActivated(establishment: Establishment) {
+        const request = this.MailjetClient.post("send", {'version': 'v3.1'})
+        .request({
+            "Messages":[
+                    {
+                            "From": {
+                                    "Email": 'Hello@weekly-app.be',
+                                    "Name": "Weekly"
+                            },
+                            "To": [
+                                    {
+                                            "Email": establishment.email,
+                                            "Name": `${establishment.name}`
+                                    }
+                            ],
+                            "Subject": "Votre établissement a été accepter sur weeklyapp.be!",
+                            "TextPart": 'Texte de message établissement approuvé...',
+                            "HTMLPart": 'Texte de message établissement approuvé...'
+                    }
+            ]
+        })
+    }
+
+    messageActivatedEvent(establishment: Events) {
         const request = this.MailjetClient.post("send", {'version': 'v3.1'})
         .request({
             "Messages":[

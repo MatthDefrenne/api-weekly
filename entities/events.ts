@@ -19,6 +19,15 @@ export class Events {
   telephone: string;
 
   @Column()
+  email: string;
+  
+  @Column()
+  town: string;
+
+  @Column()
+  adresse: string;
+
+  @Column()
   url: string;
 
   @OneToMany(type => Photos, photo => photo.event)
@@ -36,6 +45,12 @@ export class Events {
   @CreateDateColumn()
   updatedAt: Date;
 
+  @Column({ default: false })
+  isActive: boolean;
+
+  @Column({ default: false })
+  isPermanent: boolean;
+
   @Column('geometry', {
     name: 'geo',
     nullable: true,
@@ -44,5 +59,5 @@ export class Events {
   geoLocation: object;
 
   @Column()
-  adresse: string;
+  userId: string;
 }
