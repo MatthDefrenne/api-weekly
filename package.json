@@ -29,6 +29,7 @@
     "@types/node-mailjet": "^3.3.4",
     "@types/passport-facebook": "^2.1.10",
     "cloudinary": "^1.24.0",
+    "moment": "^2.29.1",
     "mysql2": "^2.2.5",
     "node-mailjet": "^3.3.1",
     "passport": "^0.4.1",

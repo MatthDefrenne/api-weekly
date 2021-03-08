@@ -7,6 +7,7 @@ import { EmailingService } from 'src/emailing/emailing.service';
 import { PhotosService } from 'src/photos/photos.service';
 import { SchedulesService } from 'src/schedules/schedules.service';
 import { Connection, LessThan, MoreThan } from 'typeorm';
+import * as moment from 'moment';
 
 @Injectable()
 export class EventService {
@@ -49,7 +50,9 @@ export class EventService {
         const current = new Date();
         const first = current.getDate() - current.getDay();
         const last = first + 6;
-        return eventRepo.find({where: {endTime: MoreThan(first), startTime: LessThan(last)}, relations: ['photos', 'schedules']});
+        console.log(moment(first).format('YYYY-MM-DD'), +first)
+        return eventRepo.find({where: {endTime: MoreThan(moment(first).format('YYYY-MM-DD')), startTime:
+        LessThan(moment(last).format('YYYY-MM-DD'))}, relations: ['photos', 'schedules']});
     }
 
     async findByUserId(user: User): Promise<Events[]>  {

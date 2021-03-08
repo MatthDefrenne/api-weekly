@@ -3,8 +3,9 @@ import { Photos } from './photos';
 import { Schedules } from './schedules';
 @Entity()
 export class Events {
-  @PrimaryGeneratedColumn()
-  id: number;
+
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column()
   startTime: Date;
@@ -20,7 +21,7 @@ export class Events {
 
   @Column()
   email: string;
-  
+
   @Column()
   town: string;
 

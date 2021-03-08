@@ -31,6 +31,12 @@ export class EventController {
       const etabs = await this.eventService.findAllThisWeek();
       res.status(HttpStatus.OK).json(etabs);
     }
+
+    @Get('self/:id')
+    async findOne(@Res() res: Response, @Param() params): Promise<any> {
+      const etabs = await this.eventService.findOne(params);
+      res.status(HttpStatus.OK).json(etabs);
+    }
     
     @Get('user/:id')
     async getMyEvent(@Res() res: Response, @Param() params): Promise<any> {
