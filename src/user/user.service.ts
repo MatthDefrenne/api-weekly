@@ -19,6 +19,7 @@ export class UserService {
     async findOne(user: User): Promise<User> {
         try {
             const userRepo = this.connection.getRepository(User);
+            console.log(user);
             return userRepo.findOne({where: {email: user.email, password: sha1(user.password)}})
         } catch (error) {
             throw error;
