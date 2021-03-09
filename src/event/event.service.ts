@@ -47,10 +47,8 @@ export class EventService {
 
     async findAllThisWeek(): Promise<Events[]>  {
         const eventRepo = this.connection.getRepository(Events);
-        const current = new Date();
-        const first = current.getDate() - current.getDay();
-        const last = first + 6;
-        console.log(moment(first).format('YYYY-MM-DD'), +first)
+        const first = moment(new Date());
+        const last = moment(first).add({day: 6});
         return eventRepo.find({where: {endTime: MoreThan(moment(first).format('YYYY-MM-DD')), startTime:
         LessThan(moment(last).format('YYYY-MM-DD'))}, relations: ['photos', 'schedules']});
     }
